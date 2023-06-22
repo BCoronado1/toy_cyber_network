@@ -1,0 +1,77 @@
+version: "3.9"
+services:
+  decoy_a:
+    container_name: decoy_a
+    image: debian:latest
+    command: sleep infinity
+    networks:
+      toy_network:
+        ipv4_address: ${DECOY_A_IP}
+    cap_add:
+      - NET_ADMIN
+  decoy_b:
+    container_name: decoy_b
+    image: ubuntu:latest
+    command: sleep infinity
+    networks:
+      toy_network:
+        ipv4_address: ${DECOY_B_IP}
+    cap_add:
+      - NET_ADMIN
+  decoy_c:
+    container_name: decoy_c
+    image: centos:latest
+    command: sleep infinity
+    networks:
+      toy_network:
+        ipv4_address: ${DECOY_C_IP}
+    cap_add:
+      - NET_ADMIN
+  decoy_d:
+    container_name: decoy_d
+    image: postgres:latest
+    command: sleep infinity
+    networks:
+      toy_network:
+        ipv4_address: ${DECOY_D_IP}
+    cap_add:
+      - NET_ADMIN
+  decoy_e:
+    container_name: decoy_e
+    image: tomcat:latest
+    command: sleep infinity
+    networks:
+      toy_network:
+        ipv4_address: ${DECOY_E_IP}
+    cap_add:
+      - NET_ADMIN
+  attacker:
+    container_name: attacker
+    build:
+      context: .
+      dockerfile: Dockerfile_attacker
+    networks:
+      toy_network:
+        ipv4_address: ${ATTACKER_IP}
+    cap_add:
+      - NET_ADMIN
+  listener:
+    container_name: listener
+    build:
+      context: .
+      dockerfile: Dockerfile_listener
+    environment:
+      - TOY_SUBNET=${TOY_SUBNET}
+    network_mode: host
+    volumes:
+      - ./log:/var/log/
+
+
+networks:
+  toy_network:
+    name: toy_network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${TOY_SUBNET}

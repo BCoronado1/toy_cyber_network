@@ -1,0 +1,6 @@
+FROM ubuntu:20.04
+ENV PYTHONUNBUFFERED=1
+RUN apt-get update && apt-get install -y python3 python3-pip tcpdump
+RUN python3 -m pip install netifaces
+COPY listener.py /listener.py
+CMD python3 -u listener.py

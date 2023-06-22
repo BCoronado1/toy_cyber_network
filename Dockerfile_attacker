@@ -1,0 +1,6 @@
+FROM kalilinux/kali-rolling
+ENV PYTHONUNBUFFERED=1
+RUN apt-get update && apt-get install -y python3 python3-pip nmap ethtool
+RUN python3 -m pip install python-nmap
+COPY attacker.py /attacker.py
+CMD python3 -u attacker.py
