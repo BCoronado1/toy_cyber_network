@@ -35,7 +35,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     target_iface = get_iface()
-    command = ["tcpdump", "-n", "-i", target_iface]
+    command = ["tcpdump", "-n", "-tttt", "-i", target_iface]
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     tcp_dump_regex = re.compile(r'\d{1,2}:\d{1,2}:\d{1,2}.\d{6} IP '
